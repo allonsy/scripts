@@ -1,0 +1,5 @@
+#!/bin/bash
+
+i3-msg "workspace 2; append_layout /home/alecsnyder/.config/i3/coding.json"
+i3-msg "workspace 2; exec terminator"
+i3-msg "workspace 2; exec code-oss --unity-launch"
