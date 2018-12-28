@@ -6,6 +6,7 @@ if [ $CURRENT_LAYOUT = "us" ]; then
 	setxkbmap il
 elif [ $CURRENT_LAYOUT = "il" ]; then
 	setxkbmap us
+	xmodmap ~/.Xmodmap
 else
 	echo "Unknown layout"
 fi
