@@ -1,0 +1,38 @@
+#compdef totp
+#autoload
+
+# Copyright (C) 2012 - 2014:
+#    Johan Venant <jvenant@invicem.pro>
+#    Brian Mattern <rephorm@rephorm.com>
+#    Jason A. Donenfeld <Jason@zx2c4.com>.
+# All Rights Reserved.
+# This file is licensed under the GPLv2+. Please see COPYING for more information.
+# Edited by Alec Snyder
+
+
+# If you use multiple repositories, you can configure completion like this:
+#
+# compdef _pass workpass
+# zstyle ':completion::complete:workpass::' prefix "$HOME/work/pass"
+# workpass() {
+#   PASSWORD_STORE_DIR=$HOME/work/pass pass $@
+# }
+
+_totp () {
+    _arguments : \
+        "-c[copy to clipboard]"
+    _pass_complete_entries_with_subdirs
+}
+
+_pass_complete_entries_helper () {
+	local IFS=$'\n'
+	local prefix
+	zstyle -s ":completion:${curcontext}:" prefix prefix || prefix="$HOME/.password-store/2FA"
+	_values -C 'passwords' ${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' -e 's#\\#\\\\#' | sort):-""}
+}
+
+_pass_complete_entries_with_subdirs () {
+	_pass_complete_entries_helper
+}
+
+_totp
