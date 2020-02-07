@@ -15,9 +15,14 @@ for PACKAGE in "${PACKAGE_LIST[@]}"; do
     PACKAGE_NAME=${PACKAGE_VALS[0]}
     PACKAGE_VERSION_NEW=${PACKAGE_VALS[1]}
     
-    OLD_PACKAGE_LIST="$(sudo pacman -Q $PACKAGE_NAME)"
-    read -r -a OLD_PACKAGE_VALS <<< "$OLD_PACKAGE_LIST"
-    PACKAGE_VERSION_OLD=${OLD_PACKAGE_VALS[1]}
+    PACKAGE_VERSION_OLD=""
+    if (sudo pacman -Q $PACKAGE_NAME > /dev/null 2> /dev/null); then
+        OLD_PACKAGE_LIST="$(sudo pacman -Q $PACKAGE_NAME)"
+        read -r -a OLD_PACKAGE_VALS <<< "$OLD_PACKAGE_LIST"
+        PACKAGE_VERSION_OLD=${OLD_PACKAGE_VALS[1]}
+    else
+        PACKAGE_VERSION_OLD="NEW"
+    fi
 
     echo "$PACKAGE_NAME $PACKAGE_VERSION_OLD $PACKAGE_VERSION_NEW" >> $TRANSACTION_FILE
     TO_UPDATE+=("$PACKAGE_NAME")
